@@ -5,7 +5,7 @@ Nowhere near to completion - collaboration is welcome!
 At the moment the video file needs to be set as a URI in the filepath variable in src/main.rs for testing.
 
 TODO;
-- Fix panic of seeking when the video is playing 
+ 
 - Function that allows seeking to N places in the video - to be used for a scrollbar in guis
 - Add a filepath to uri converter and then pass argc and argv to main
 - Handling of subtitle / multiple audio tracks
