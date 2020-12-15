@@ -57,17 +57,18 @@ fn main() {
                     }
                 }
 
-                if keys.contains(&Keycode::A) && stream_info.seek_enabled {
+                if keys.contains(&Keycode::A) &&
+                    stream_info.seek_enabled && !stream_info.playing{
                     stream_info.playbin.seek_simple(gstreamer::SeekFlags::FLUSH | gstreamer::SeekFlags::KEY_UNIT, prev_position-5*gstreamer::SECOND).expect("Failed to seek");
                     prev_position = prev_position - 5*gstreamer::SECOND;
 
                 }
 
-                if keys.contains(&Keycode::D) && stream_info.seek_enabled {
-                    stream_info.playbin.seek_simple(gstreamer::SeekFlags::FLUSH | gstreamer::SeekFlags::KEY_UNIT, prev_position+5*gstreamer::SECOND).expect("Failed to seek");
-                    prev_position = prev_position + 5*gstreamer::SECOND;
+                if keys.contains(&Keycode::D) &&
+                    stream_info.seek_enabled && !stream_info.playing {
+                    stream_info.playbin.seek_simple(gstreamer::SeekFlags::FLUSH | gstreamer::SeekFlags::KEY_UNIT, prev_position + 5 * gstreamer::SECOND).expect("Failed to seek");
+                    prev_position = prev_position + 5 * gstreamer::SECOND;
                 }
-
                 if stream_info.playing{
 
                     let mut position = stream_info
@@ -81,7 +82,7 @@ fn main() {
                     println!("Position {} / {}", position, stream_info.duration);
                     io::stdout().flush().unwrap();
 
-                    //TODO - these are causing a panic, no clue why. Fix these.
+                   
                     if keys.contains(&Keycode::D) && stream_info.seek_enabled{
                         stream_info.playbin.set_state(gstreamer::State::Paused).expect("Could not set to paused");
                         stream_info.playbin.seek_simple(gstreamer::SeekFlags::FLUSH | gstreamer::SeekFlags::KEY_UNIT, position-5*gstreamer::SECOND).expect("Failed to seek");
