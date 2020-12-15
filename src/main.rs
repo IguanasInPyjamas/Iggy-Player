@@ -85,7 +85,7 @@ fn main() {
                    
                     if keys.contains(&Keycode::D) && stream_info.seek_enabled{
                         stream_info.playbin.set_state(gstreamer::State::Paused).expect("Could not set to paused");
-                        stream_info.playbin.seek_simple(gstreamer::SeekFlags::FLUSH | gstreamer::SeekFlags::KEY_UNIT, position-5*gstreamer::SECOND).expect("Failed to seek");
+                        stream_info.playbin.seek_simple(gstreamer::SeekFlags::FLUSH | gstreamer::SeekFlags::KEY_UNIT, position+5*gstreamer::SECOND).expect("Failed to seek");
                         stream_info.playbin.set_state(gstreamer::State::Playing).expect("Could not set to playing");
 
                     }
