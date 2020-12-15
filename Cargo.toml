@@ -1,0 +1,14 @@
+[package]
+name = "Iggy-Player"
+version = "0.1.0"
+authors = ["Iggy"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ffmpeg-next = "4.3.7"
+gstreamer = "0.16.5"
+termion = "1.5.1"
+device_query = "0.1.0"
+
