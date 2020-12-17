@@ -14,7 +14,6 @@ struct _StreamInfo {
     n_video_streams: i32, //Number of video streams
     n_audio_streams: i32, //Number of audio streams
     n_subtitles: i32, //Number of subtitle files
-
     current_video_stream: i32,
     current_audio_stream: i32,
     current_subtitle: i32
@@ -48,14 +47,10 @@ fn main() {
         .set_by_nick("audio")
         .build()
         .unwrap();
+
     pipeline.set_property("flags",&flags).unwrap();
+    
     let bus = pipeline.get_bus().unwrap();
-
-    //PLAYGROUND BEGINS
-
-
-
-    //PLAYGROUND ENDS
     println!("{:?}",bus);
 
     let mut prev_position = 0*gstreamer::SECOND;
@@ -71,7 +66,6 @@ fn main() {
         current_audio_stream:0,
         current_video_stream:0,
         current_subtitle:0,
-
     };
 
     stream_info.playbin
@@ -81,10 +75,15 @@ fn main() {
                 .expect("playbin \"audio-tags-changed\" signal values[1]")
                 .unwrap();
 
-            let a = playbin.get_property("current-audio").unwrap().get_some::<i32>().unwrap();
-            println!("hmm {:?}",a);
-
-            playbin.set_property("current-audio",&1);
+            let current_audio = playbin.get_property("current-audio").unwrap().get_some::<i32>().unwrap();
+            
+            println!("hmm {:?}", current_audio);
+            
+            stream_info.n_audio_stream = playbin.get_property("n-audio").unwrap().get_some::<i32>().unwrap();
+            
+            if current_audio != stream_info.current_audio_stream {
+                playbin.set_property("current-audio", stream_info.current_audio_stream);
+            }
 
             None
         })
@@ -103,9 +102,8 @@ fn main() {
                 handle_message(&mut stream_info, &msg);
             }
             None => {
-
-                if keys.contains(&Keycode::Space){
-                    if stream_info.playing == true{
+                if keys.contains(&Keycode::Space) {
+                    if stream_info.playing == true {
                         println!{"Pausing"}
                         stream_info.playbin.set_state(gstreamer::State::Paused).expect("Could not pause");
                     } else {
@@ -113,12 +111,27 @@ fn main() {
                             .expect("Could not resume");
                     }
                 }
+                
+                if keys.contains(&Keycode::Up) {
+                    if (stream_info.current_audio_stream == (stream_info.n_audio_stream - 1)) {
+                        stream_info.current_audio_stream = 0; 
+                    } else {
+                        stream_info.current_audio_stream += 1;
+                    }
+                }
+                
+                if keys.contains(&Keycode::Down) {
+                    if (stream_info.current_audio_stream == 0) {
+                        stream_info.current_audio_stream = (stream_info.n_audio_stream - 1); 
+                    } else {
+                        stream_info.current_audio_stream -= 1;
+                    }
+                }
 
                 if keys.contains(&Keycode::A) &&
-                    stream_info.seek_enabled && !stream_info.playing{
+                    stream_info.seek_enabled && !stream_info.playing {
                     stream_info.playbin.seek_simple(gstreamer::SeekFlags::FLUSH | gstreamer::SeekFlags::KEY_UNIT, prev_position-5*gstreamer::SECOND).expect("Failed to seek");
                     prev_position = prev_position - 5*gstreamer::SECOND;
-
                 }
 
                 if keys.contains(&Keycode::D) &&
@@ -126,25 +139,23 @@ fn main() {
                     stream_info.playbin.seek_simple(gstreamer::SeekFlags::FLUSH | gstreamer::SeekFlags::KEY_UNIT, prev_position + 5 * gstreamer::SECOND).expect("Failed to seek");
                     prev_position = prev_position + 5 * gstreamer::SECOND;
                 }
+                
                 if stream_info.playing{
-
                     let mut position = stream_info
                         .playbin
                         .query_position::<gstreamer::ClockTime>().expect("Couldn't query");
 
-
                     if stream_info.duration == gstreamer::CLOCK_TIME_NONE{
                         stream_info.duration = stream_info.playbin.query_duration().expect("Couldn't query");
                     }
+                    
                     println!("Position {} / {}", position, stream_info.duration);
                     io::stdout().flush().unwrap();
-
 
                     if keys.contains(&Keycode::D) && stream_info.seek_enabled{
                         stream_info.playbin.set_state(gstreamer::State::Paused).expect("Could not set to paused");
                         stream_info.playbin.seek_simple(gstreamer::SeekFlags::FLUSH | gstreamer::SeekFlags::KEY_UNIT, position+5*gstreamer::SECOND).expect("Failed to seek");
                         stream_info.playbin.set_state(gstreamer::State::Playing).expect("Could not set to playing");
-
                     }
 
                     if keys.contains(&Keycode::A) && stream_info.seek_enabled {
