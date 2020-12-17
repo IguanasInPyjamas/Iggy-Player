@@ -89,15 +89,8 @@ fn main() {
 
     //TODO: Sleep is here to ensure that the video is buffered before the streams are queried, we can probably get this from a signal return instead of time.
     std::thread::sleep(std::time::Duration::from_millis(4000));
-    stream_info.n_audio_streams = stream_info.playbin.get_property("n-audio").unwrap().get_some::<i32>().unwrap();
-    stream_info.n_video_streams = stream_info.playbin.get_property("n-video").unwrap().get_some::<i32>().unwrap();
-    stream_info.n_subtitles = stream_info.playbin.get_property("n-text").unwrap().get_some::<i32>().unwrap();
-
-    stream_info.current_audio_stream = stream_info.playbin.get_property("current-audio").unwrap().get_some::<i32>().unwrap();
-    stream_info.current_video_stream = stream_info.playbin.get_property("current-video").unwrap().get_some::<i32>().unwrap();
-    stream_info.current_subtitle = stream_info.playbin.get_property("current-text").unwrap().get_some::<i32>().unwrap();
-    println!("{}, {}, {}", stream_info.current_audio_stream, stream_info.current_video_stream, stream_info.current_subtitle);
-
+    stream_info::populate_from_playbin(&mut stream_info);
+    
     while !stream_info.terminate {
         let msg = bus.timed_pop(25 * gstreamer::MSECOND);
         let keys: Vec<Keycode> = device_state.get_keys();
