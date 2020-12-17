@@ -3,14 +3,25 @@ use std::io::Write;
 use gstreamer;
 use device_query::{DeviceQuery, DeviceState, Keycode};
 use gstreamer::prelude::*;
+use glib;
 
 struct _StreamInfo {
     playbin: gstreamer::Element, //Stream.
     playing: bool, //Is it playing or paused
     seek_enabled: bool, //Can stream seek?
     terminate: bool, //End?
-    duration: gstreamer::ClockTime
+    duration: gstreamer::ClockTime,
+    n_video_streams: i32, //Number of video streams
+    n_audio_streams: i32, //Number of audio streams
+    n_subtitles: i32, //Number of subtitle files
 
+    current_video_stream: i32,
+    current_audio_stream: i32,
+    current_subtitle: i32
+}
+
+struct stream_switcher{
+    stream: i32,
 }
 
 fn main() {
@@ -19,13 +30,34 @@ fn main() {
     //TODO Implement a filepath to URI function and then this doesn't have to be hardcoded, this is just a test case.
     //TODO Use the GNU online videos for unit testing purposes.
     // TODO Implement unit tests.
-    let filepath = "file:///media/mep19mj/Anime%201/TV%20Shows/Psych/Psych.Season.5.720p.x265.HEVC-LION%5BUTR%5D/Psych.S05E07.720p.x265.HEVC-LION[UTR].mkv";
+    //let filepath = "file:///media/mep19mj/Anime%201/TV%20Shows/Psych/Psych.Season.5.720p.x265.HEVC-LION%5BUTR%5D/Psych.S05E07.720p.x265.HEVC-LION[UTR].mkv";
+    //let filepath = "file:///media/mep19mj/Anime%201/Anime/Code%20Geass%20Lelouch%20of%20the%20Rebellion/Code%20Geass%20Lelouch%20of%20the%20Rebellion%20R1%2003.mkv";
+    let filepath = "file:///media/mep19mj/Anime%201/Anime/Flip%20Flappers/%20Flip%20Flappers%20-%2001.mkv";
     let pipe = format ! ("playbin uri={} name=play video-sink='autovideosink' audio-sink='autoaudiosink'", filepath);
-    let  pipeline = gstreamer::parse_launch( &pipe).unwrap();
+    let mut pipeline = gstreamer::parse_launch( &pipe).unwrap();
 
     pipeline.set_state(gstreamer::State::Playing).expect("Unable to set to playing");
 
+    //Using flags makes this all giga easy, we can query the names and values from the flags, hopefully to dynamically make a list of audio/sub streams
+    let mut why = stream_switcher{stream: 0};
+    println!("arggg {}",why.stream);
+    let flags = pipeline.get_property("flags").unwrap();
+    let flags_class = glib::FlagsClass::new(flags.type_()).unwrap();
+    //These can then be set and unset using this value.
+    let flags = flags_class.builder_with_value(flags).unwrap()
+        .set_by_nick("audio")
+        .build()
+        .unwrap();
+    pipeline.set_property("flags",&flags).unwrap();
     let bus = pipeline.get_bus().unwrap();
+
+    //PLAYGROUND BEGINS
+
+
+
+    //PLAYGROUND ENDS
+    println!("{:?}",bus);
+
     let mut prev_position = 0*gstreamer::SECOND;
     let mut stream_info = _StreamInfo{
         playbin: pipeline,
@@ -33,11 +65,36 @@ fn main() {
         terminate: false,
         seek_enabled: false,
         duration: gstreamer::CLOCK_TIME_NONE,
-
+        n_video_streams: 0,
+        n_audio_streams: 0,
+        n_subtitles: 0,
+        current_audio_stream:0,
+        current_video_stream:0,
+        current_subtitle:0,
 
     };
 
+    stream_info.playbin
+        .connect("audio-changed", false, |values| {
+            let playbin = values[0]
+                .get::<glib::Object>()
+                .expect("playbin \"audio-tags-changed\" signal values[1]")
+                .unwrap();
+
+            let a = playbin.get_property("current-audio").unwrap().get_some::<i32>().unwrap();
+            println!("hmm {:?}",a);
+
+            playbin.set_property("current-audio",&1);
+
+            None
+        })
+        .unwrap();
+
+
+
     while !stream_info.terminate {
+        stream_info.playbin.set_state(gstreamer::State::Paused).expect("Could not pause");
+        stream_info.playbin.emit("audio-changed",&[&1]);
         let msg = bus.timed_pop( 25 * gstreamer::MSECOND);
         let keys: Vec<Keycode> = device_state.get_keys();
 
@@ -82,7 +139,7 @@ fn main() {
                     println!("Position {} / {}", position, stream_info.duration);
                     io::stdout().flush().unwrap();
 
-                   
+
                     if keys.contains(&Keycode::D) && stream_info.seek_enabled{
                         stream_info.playbin.set_state(gstreamer::State::Paused).expect("Could not set to paused");
                         stream_info.playbin.seek_simple(gstreamer::SeekFlags::FLUSH | gstreamer::SeekFlags::KEY_UNIT, position+5*gstreamer::SECOND).expect("Failed to seek");
