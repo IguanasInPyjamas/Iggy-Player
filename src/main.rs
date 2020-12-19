@@ -8,18 +8,29 @@ use glib;
 pub mod stream_info;
 pub mod inputs;
 pub mod events;
-
+pub mod uri;
 
 fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    //args 0 has the reference to binaries, the first filepath will then be in point 1
+    //TODO: Encorporate more use of args to play multiple files, preferably after a --playlist tag
+
+    let path = &args[1];
     gstreamer::init().unwrap();
     let device_state = DeviceState::new();
     //TODO Implement a filepath to URI function and then this doesn't have to be hardcoded, this is just a test case.
     //TODO Use the GNU online videos for unit testing purposes.
     // TODO Implement unit tests.
-    let filepath2 = "file:///media/mep19mj/Anime%201/TV%20Shows/Psych/Psych.Season.5.720p.x265.HEVC-LION%5BUTR%5D/Psych.S05E07.720p.x265.HEVC-LION[UTR].mkv";
-    //let filepath = "file:///media/mep19mj/Anime%201/Anime/Code%20Geass%20Lelouch%20of%20the%20Rebellion/Code%20Geass%20Lelouch%20of%20the%20Rebellion%20R1%2003.mkv";
-    let filepath = "file:///media/mep19mj/Anime%201/Anime/Flip%20Flappers/%20Flip%20Flappers%20-%2001.mkv";
+
+    //For use in unit tests.
+    //let test_path = ""https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_cropped_multilingual.webm";
+
+    let filepath = uri::get_uri_from_path(path);
+
     let pipe = format!("playbin uri={} name=play video-sink='autovideosink' audio-sink='autoaudiosink'", filepath);
+
+
+
     let mut pipeline = gstreamer::parse_launch(&pipe).unwrap();
 
     pipeline.set_state(gstreamer::State::Playing).expect("Unable to set to playing");
