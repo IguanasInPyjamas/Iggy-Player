@@ -44,7 +44,7 @@ pub fn switch_subs(stream_info: &mut stream_info::_StreamInfo){
     let new_stream = (stream_info.current_subtitle + 1) % stream_info.n_subtitles;
     stream_info.playbin.set_property("current-text", &new_stream).unwrap();
     std::thread::sleep(std::time::Duration::from_millis(50));
-    stream_info.current_audio_stream = new_stream;
+    stream_info.current_subtitle = new_stream;
 }
 
 //fn toggle_subs(stream_info){
