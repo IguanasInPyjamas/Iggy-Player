@@ -21,11 +21,15 @@ fn main() {
     //TODO Implement a filepath to URI function and then this doesn't have to be hardcoded, this is just a test case.
     //TODO Use the GNU online videos for unit testing purposes.
     // TODO Implement unit tests.
-
+    let mut filepath :std::string::String = "".to_string();
     //For use in unit tests.
-    //let test_path = ""https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_cropped_multilingual.webm";
-
-    let filepath = uri::get_uri_from_path(path);
+    //let path = "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_cropped_multilingual.webm";
+    if path.contains("https"){
+        path.replace(" ","%20");
+        filepath = path.to_string();
+    } else {
+        filepath = uri::get_uri_from_path(&path)
+    };
 
     let pipe = format!("playbin uri={} name=play video-sink='autovideosink' audio-sink='autoaudiosink'", filepath);
 
