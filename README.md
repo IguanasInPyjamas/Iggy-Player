@@ -7,7 +7,5 @@ At the moment the video file needs to be set as a URI in the filepath variable i
 TODO;
  
 - Function that allows seeking to N places in the video - to be used for a scrollbar in guis
-- build in url/file path handling - as urls to videos can be played. 
-- Handling of subtitle / multiple audio tracks
 - Playlists 
 - Shuffling, loop 
