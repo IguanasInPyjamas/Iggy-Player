@@ -83,7 +83,7 @@ pub fn handle_message(stream_info: &mut stream_info::_StreamInfo, msg: & gstream
                 if stream_info.playing{
                     let mut seeking = gstreamer::query::Seeking::new(gstreamer::Format::Time);
                     if stream_info.playbin.query(&mut seeking){
-                        let (seekable, start, end) = seeking.get_result();
+                        let (seekable, _start, _end) = seeking.get_result();
                         stream_info.seek_enabled = seekable;
                         if seekable {
                             println!("Seeking is enabled");
