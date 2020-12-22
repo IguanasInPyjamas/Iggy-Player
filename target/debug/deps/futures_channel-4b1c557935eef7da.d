@@ -1,0 +1,11 @@
+/home/mep19mj/Documents/Iggy-Player/target/debug/deps/futures_channel-4b1c557935eef7da.rmeta: /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/lib.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/lock.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/mpsc/mod.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/mpsc/queue.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/oneshot.rs
+
+/home/mep19mj/Documents/Iggy-Player/target/debug/deps/libfutures_channel-4b1c557935eef7da.rlib: /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/lib.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/lock.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/mpsc/mod.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/mpsc/queue.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/oneshot.rs
+
+/home/mep19mj/Documents/Iggy-Player/target/debug/deps/futures_channel-4b1c557935eef7da.d: /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/lib.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/lock.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/mpsc/mod.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/mpsc/queue.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/oneshot.rs
+
+/home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/lib.rs:
+/home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/lock.rs:
+/home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/mpsc/mod.rs:
+/home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/mpsc/queue.rs:
+/home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.8/src/oneshot.rs:

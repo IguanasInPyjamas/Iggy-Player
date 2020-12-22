@@ -1,0 +1,11 @@
+/home/mep19mj/Documents/Iggy-Player/target/release/deps/unicode_segmentation-6cc26d1e001d7ddc.rmeta: /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/lib.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/grapheme.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/tables.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/word.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/sentence.rs
+
+/home/mep19mj/Documents/Iggy-Player/target/release/deps/libunicode_segmentation-6cc26d1e001d7ddc.rlib: /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/lib.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/grapheme.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/tables.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/word.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/sentence.rs
+
+/home/mep19mj/Documents/Iggy-Player/target/release/deps/unicode_segmentation-6cc26d1e001d7ddc.d: /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/lib.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/grapheme.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/tables.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/word.rs /home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/sentence.rs
+
+/home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/lib.rs:
+/home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/grapheme.rs:
+/home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/tables.rs:
+/home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/word.rs:
+/home/mep19mj/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.7.1/src/sentence.rs:

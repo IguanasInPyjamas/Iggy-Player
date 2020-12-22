@@ -11,4 +11,4 @@ glib = "0.10.3"
 gstreamer = "0.16.5"
 device_query = "0.1.0"
 url = "1.5.1"
-
+rand = "0.8.0"
