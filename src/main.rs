@@ -4,9 +4,10 @@ pub mod inputs;
 pub mod events;
 pub mod uri;
 pub mod player;
+pub mod playlists;
 
 fn main() {
-    let args:Vec<String> = std::env::args().collect();
+    let mut args:Vec<String> = std::env::args().collect();
     let arg_len = args.len();
     if arg_len == 1{
         println!("No video was selected!");
