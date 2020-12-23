@@ -7,7 +7,6 @@ pub mod playlists;
 
 fn main() {
     let mut args:Vec<String> = std::env::args().collect();
-    println!("{:?}",args);
     let arg_len = args.len();
     if arg_len == 1{
         println!("No video was selected!");
