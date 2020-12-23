@@ -7,9 +7,7 @@ pub fn setup_pipeline(path:&std::string::String) -> gstreamer::Element {
     let mut filepath = std::string::String::from("");
     if path.contains("https") || path.contains("http"){
 
-        filepath = path.replace(" ","%20");
-        filepath = filepath.to_string();
-        println!("{:?}",filepath);
+        filepath = path.replace(" ","%20").to_string();
     } else {
         filepath = get_uri_from_path(&path)
     };
