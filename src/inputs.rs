@@ -3,8 +3,41 @@ use gstreamer::prelude::*;
 use device_query::Keycode;
 use std::io;
 use std::io::Write;
+use glib;
+use glib::prelude::*;
+
 
 use crate::stream_info;
+
+pub fn volume_down(stream_info: &mut stream_info::_StreamInfo, prev_position: gstreamer::ClockTime){
+    if stream_info.volume >= 0.05{
+        let new_volume = stream_info.volume - 0.05;
+        stream_info.playbin.set_property("volume", &new_volume.to_value()).expect("Volume could not be set");
+        stream_info.volume = new_volume;
+        std::thread::sleep(std::time::Duration::from_millis(50))
+    } else{
+        println!("Volume too low, can't go lower");
+    }
+}
+
+pub fn volume_up(stream_info: &mut stream_info::_StreamInfo, prev_position: gstreamer::ClockTime){
+    if stream_info.volume <= 0.95{
+        let new_volume = stream_info.volume + 0.05;
+        stream_info.playbin.set_property("volume",&new_volume.to_value()).expect("Volume could not be set");
+        stream_info.volume = new_volume;
+        std::thread::sleep(std::time::Duration::from_millis(50))
+    } else{
+        println!("Volume too high, can't go higher");
+    }
+}
+
+//pub fn stream_speed_up(stream_info: &mut stream_info::_StreamInfo, prev_position: gstreamer::ClockTime){
+
+//}
+
+//pub fn stream_speed_down(stream_info: &mut stream_info::_StreamInfo, prev_position: gstreamer::ClockTime){
+
+//}
 
 pub fn seek_right(stream_info: &mut stream_info::_StreamInfo, prev_position: gstreamer::ClockTime) -> gstreamer::ClockTime {
     let mut previous = prev_position;
@@ -73,7 +106,9 @@ pub fn check_keypress(keys: &Vec<device_query::Keycode>,position:gstreamer::Cloc
     }
 
     if keys.contains(&Keycode::A) &&
-        stream_info.seek_enabled && !stream_info.playing {
+        stream_info.seek_enabled &&
+        !stream_info.playing &&
+        prev_position > 5 * gstreamer::SECOND {
         prev_position = seek_left(&mut stream_info, prev_position);
 
     }
@@ -83,6 +118,7 @@ pub fn check_keypress(keys: &Vec<device_query::Keycode>,position:gstreamer::Cloc
         prev_position = seek_right(&mut stream_info, prev_position);
 
     }
+
     if stream_info.playing {
         let position = stream_info
             .playbin
@@ -103,7 +139,7 @@ pub fn check_keypress(keys: &Vec<device_query::Keycode>,position:gstreamer::Cloc
             std::thread::sleep(std::time::Duration::from_millis(250))
         }
 
-        if keys.contains(&Keycode::A) && stream_info.seek_enabled {
+        if keys.contains(&Keycode::A) && stream_info.seek_enabled && prev_position > 5 * gstreamer::SECOND {
             stream_info.playbin.set_state(gstreamer::State::Paused).expect("Could not set to paused");
             prev_position = seek_left(&mut stream_info, prev_position);
             stream_info.playbin.set_state(gstreamer::State::Playing).expect("Could not set to playing");
@@ -112,7 +148,7 @@ pub fn check_keypress(keys: &Vec<device_query::Keycode>,position:gstreamer::Cloc
 
 
 
-        if keys.contains(&Keycode::V) {
+        if keys.contains(&Keycode::V) && stream_info.n_audio_streams > 0{
             switch_audio(&mut stream_info);
             prev_position = position;
         }
@@ -122,9 +158,19 @@ pub fn check_keypress(keys: &Vec<device_query::Keycode>,position:gstreamer::Cloc
         prev_position = position;
     }
 
-    if keys.contains(&Keycode::S){
+    if keys.contains(&Keycode::S) && stream_info.n_subtitles > 0{
         switch_subs(&mut stream_info);
         prev_position = position;
+    }
+
+    if keys.contains(&Keycode::U) &&
+        stream_info.playing{
+        volume_down(&mut stream_info, prev_position)
+    }
+
+    if keys.contains(&Keycode::I) &&
+        stream_info.playing{
+        volume_up(&mut stream_info, prev_position)
     }
 
     return prev_position

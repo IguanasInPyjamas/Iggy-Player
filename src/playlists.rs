@@ -1,5 +1,8 @@
 use rand::thread_rng;
 use rand::seq::SliceRandom;
+use device_query::{DeviceQuery, DeviceState, Keycode};
+
+use crate::player;
 
 pub fn shuffle(args: &Vec<String>) -> std::vec::Vec<std::string::String>{
     let mut shuffled_list = args.clone();
@@ -7,6 +10,25 @@ pub fn shuffle(args: &Vec<String>) -> std::vec::Vec<std::string::String>{
     shuffled_list[1..].shuffle(&mut thread_rng());
     return shuffled_list
 }
+
+pub fn playlist_loop(args: &Vec<String>,arg_len: &usize) {
+    let arg_len = *(arg_len);
+    let playlist_state = DeviceState::new();
+    for i in 1..(arg_len){
+        //let new_arg:Vec<String> = vec![args[0].clone(),args[i].clone()];
+        player::player_loop(args.to_vec());
+        //This should be in player_loop
+        //let playlist_keys: Vec<Keycode> = playlist_state.get_keys();
+        //println!("count p: {}", playlist_keys.iter().filter(|&n| *n == Keycode::P).count());
+
+        std::thread::sleep(std::time::Duration::from_millis(1000));
+    }
+}
+
+pub fn playlist_check_inputs(){
+
+}
+
 
 
 mod tests {
