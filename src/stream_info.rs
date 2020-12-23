@@ -1,5 +1,7 @@
 use gstreamer;
 use gstreamer::prelude::*;
+use glib;
+use glib::prelude::*;
 
 pub struct _StreamInfo {
     pub playbin: gstreamer::Element, //Stream.
@@ -16,6 +18,8 @@ pub struct _StreamInfo {
     pub current_subtitle: i32,
 
     pub mute: bool,
+    pub volume: f64,
+    pub speed: f64,
 }
 
 pub fn populate_from_playbin(stream_info: &mut _StreamInfo){
@@ -45,6 +49,8 @@ pub fn initialise_stream(pipeline:gstreamer::Element) -> _StreamInfo {
         current_video_stream: 0,
         current_subtitle: 0,
         mute: false,
+        volume: 1.0,
+        speed: 1.0,
 
     };
     return stream_info
