@@ -15,7 +15,7 @@ fn main() {
         player::player_loop(args);
     }
     else {
-        playlists::playlist_loop(&args,&arg_len);
+        playlists::playlist_loop(&args);
 
     }
 }

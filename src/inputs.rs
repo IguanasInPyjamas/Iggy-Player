@@ -87,6 +87,14 @@ pub fn switch_subs(stream_info: &mut stream_info::_StreamInfo){
 
 //}
 
+pub fn shuffle(stream_info: &mut stream_info::_StreamInfo) {
+    stream_info.shuffle = !stream_info.shuffle;
+}
+
+pub fn loop_media(stream_info: &mut stream_info::_StreamInfo){
+    stream_info.loops = !stream_info.loops;
+}
+
 pub fn pause(stream_info: &stream_info::_StreamInfo){
     if stream_info.playing == true {
         println! {"Pausing"}
@@ -163,15 +171,24 @@ pub fn check_keypress(keys: &Vec<device_query::Keycode>,position:gstreamer::Cloc
         prev_position = position;
     }
 
-    if keys.contains(&Keycode::U) &&
-        stream_info.playing{
+    if keys.contains(&Keycode::U){
         volume_down(&mut stream_info, prev_position)
     }
 
-    if keys.contains(&Keycode::I) &&
-        stream_info.playing{
+    if keys.contains(&Keycode::I){
         volume_up(&mut stream_info, prev_position)
     }
 
+    if keys.contains(&Keycode::P){
+        shuffle(&mut stream_info);
+
+    }
+
+    if keys.contains(&Keycode::L){
+        loop_media(&mut stream_info);
+        println!("Looping current media.");
+        std::thread::sleep(std::time::Duration::from_millis(250));
+
+    }
     return prev_position
 }
