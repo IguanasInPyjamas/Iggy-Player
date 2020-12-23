@@ -22,7 +22,7 @@ pub fn playlist_loop(args: &Vec<String>,) {
             let new_args = shuffle(&args);
             playlist_loop(&new_args);
             //To ensure the while loop breaks after the recursed function ends.
-            i += 2*arg_len
+            i += 2*arg_len;
         }
 
         if !previous_stream.loops{
