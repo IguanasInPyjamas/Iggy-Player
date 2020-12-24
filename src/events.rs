@@ -20,8 +20,6 @@ pub fn setup_connects(stream_info: & stream_info::_StreamInfo){
                 .unwrap();
 
             let a = playbin.get_property("current-audio").unwrap().get_some::<i32>().unwrap();
-            println!("hmm {:?}", a);
-
             None
         })
         .unwrap();

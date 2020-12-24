@@ -7,7 +7,7 @@ use crate::inputs;
 use crate::events;
 use crate::uri;
 
-pub fn player_loop(args:Vec<String>) {
+pub fn player_loop(args:Vec<String>) -> stream_info::_StreamInfo{
     let args = args;
     //args 0 has the reference to binaries, the first filepath will then be in point 1
     //TODO: Encorporate more use of args to play multiple files, preferably after a --playlist tag
@@ -48,4 +48,7 @@ pub fn player_loop(args:Vec<String>) {
         }
     }
     stream_info.playbin.set_state(gstreamer::State::Null).expect("Unable to set state");
+
+    //Note, this should be changed to just returning stream_info, then we can save settings for future videos.
+    return stream_info;
 }

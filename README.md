@@ -8,4 +8,3 @@ TODO;
  
 - Function that allows seeking to N places in the video - to be used for a scrollbar in guis
 - Playlists 
-- Shuffling, loop 

@@ -6,6 +6,8 @@ use glib::prelude::*;
 pub struct _StreamInfo {
     pub playbin: gstreamer::Element, //Stream.
     pub playing: bool, //Is it playing or paused
+    pub shuffle: bool,
+    pub loops: bool,
     pub seek_enabled: bool, //Can stream seek?
     pub terminate: bool, //End?
     pub duration: gstreamer::ClockTime,
@@ -39,6 +41,8 @@ pub fn initialise_stream(pipeline:gstreamer::Element) -> _StreamInfo {
     let stream_info = _StreamInfo {
         playbin: pipeline,
         playing: false,
+        shuffle: false,
+        loops: false,
         terminate: false,
         seek_enabled: false,
         duration: gstreamer::CLOCK_TIME_NONE,

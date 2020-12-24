@@ -11,16 +11,24 @@ pub fn shuffle(args: &Vec<String>) -> std::vec::Vec<std::string::String>{
     return shuffled_list
 }
 
-pub fn playlist_loop(args: &Vec<String>,arg_len: &usize) {
-    let arg_len = *(arg_len);
+pub fn playlist_loop(args: &Vec<String>,) {
+    let mut i = 1;
+    let arg_len = args.len();
     let playlist_state = DeviceState::new();
-    for i in 1..(arg_len){
-        //let new_arg:Vec<String> = vec![args[0].clone(),args[i].clone()];
-        player::player_loop(args.to_vec());
-        //This should be in player_loop
-        //let playlist_keys: Vec<Keycode> = playlist_state.get_keys();
-        //println!("count p: {}", playlist_keys.iter().filter(|&n| *n == Keycode::P).count());
+    while i < (arg_len){
+        let current_stream:Vec<String> = vec![args[0].clone(),args[i].clone()];
+        let previous_stream = player::player_loop(current_stream.to_vec());
+        if previous_stream.shuffle{
+            let new_args = shuffle(&args);
+            playlist_loop(&new_args);
+            //To ensure the while loop breaks after the recursed function ends.
+            i += 2*arg_len;
+        }
 
+        if !previous_stream.loops{
+            i += 1;
+
+        }
         std::thread::sleep(std::time::Duration::from_millis(1000));
     }
 }
