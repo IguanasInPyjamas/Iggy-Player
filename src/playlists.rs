@@ -21,6 +21,8 @@ pub fn playlist_loop(args: &Vec<String>,) {
         if previous_stream.shuffle{
             let new_args = shuffle(&args);
             playlist_loop(&new_args);
+            //To ensure the while loop breaks after the recursed function ends.
+            i += 2*arg_len;
         }
 
         if !previous_stream.loops{
