@@ -8,6 +8,7 @@ use glib::prelude::*;
 
 
 use crate::stream_info;
+use crate::window_processing;
 
 pub fn volume_down(stream_info: &mut stream_info::_StreamInfo, prev_position: gstreamer::ClockTime){
     if stream_info.volume >= 0.05{
@@ -108,7 +109,10 @@ pub fn pause(stream_info: &stream_info::_StreamInfo){
 
 pub fn check_keypress(keys: &Vec<device_query::Keycode>,position:gstreamer::ClockTime,mut stream_info: &mut stream_info::_StreamInfo) -> gstreamer::ClockTime {
     let mut prev_position = position;
-    if keys.contains(&Keycode::Space) {
+    //Only have handling for linux at the moment. On Windows, this needs to be commented out. 
+    window_processing::linux_query_window(&mut stream_info);
+    if keys.contains(&Keycode::Space) &&
+    stream_info.current_window {
         pause(&stream_info);
         std::thread::sleep(std::time::Duration::from_millis(500));
     }
@@ -116,13 +120,14 @@ pub fn check_keypress(keys: &Vec<device_query::Keycode>,position:gstreamer::Cloc
     if keys.contains(&Keycode::A) &&
         stream_info.seek_enabled &&
         !stream_info.playing &&
-        prev_position > 5 * gstreamer::SECOND {
+        prev_position > 5 * gstreamer::SECOND &&
+	stream_info.current_window {
         prev_position = seek_left(&mut stream_info, prev_position);
 
     }
 
     if keys.contains(&Keycode::D) &&
-        stream_info.seek_enabled && !stream_info.playing {
+        stream_info.seek_enabled && !stream_info.playing && stream_info.current_window {
         prev_position = seek_right(&mut stream_info, prev_position);
 
     }
@@ -140,14 +145,15 @@ pub fn check_keypress(keys: &Vec<device_query::Keycode>,position:gstreamer::Cloc
         io::stdout().flush().unwrap();
 
 
-        if keys.contains(&Keycode::D) && stream_info.seek_enabled {
+        if keys.contains(&Keycode::D) && stream_info.seek_enabled && stream_info.current_window {
             stream_info.playbin.set_state(gstreamer::State::Paused).expect("Could not set to paused");
             prev_position = seek_right(&mut stream_info, prev_position);
             stream_info.playbin.set_state(gstreamer::State::Playing).expect("Could not set to playing");
             std::thread::sleep(std::time::Duration::from_millis(250))
         }
 
-        if keys.contains(&Keycode::A) && stream_info.seek_enabled && prev_position > 5 * gstreamer::SECOND {
+        if keys.contains(&Keycode::A) && stream_info.seek_enabled && prev_position > 5 * gstreamer::SECOND &&
+        stream_info.current_window {
             stream_info.playbin.set_state(gstreamer::State::Paused).expect("Could not set to paused");
             prev_position = seek_left(&mut stream_info, prev_position);
             stream_info.playbin.set_state(gstreamer::State::Playing).expect("Could not set to playing");
@@ -156,35 +162,35 @@ pub fn check_keypress(keys: &Vec<device_query::Keycode>,position:gstreamer::Cloc
 
 
 
-        if keys.contains(&Keycode::V) && stream_info.n_audio_streams > 0{
+        if keys.contains(&Keycode::V) && stream_info.n_audio_streams > 0 && stream_info.current_window {
             switch_audio(&mut stream_info);
             prev_position = position;
         }
     }
-    if keys.contains(&Keycode::M) {
+    if keys.contains(&Keycode::M) && stream_info.current_window {
         mute(&mut stream_info);
         prev_position = position;
     }
 
-    if keys.contains(&Keycode::S) && stream_info.n_subtitles > 0{
+    if keys.contains(&Keycode::S) && stream_info.n_subtitles > 0 && stream_info.current_window {
         switch_subs(&mut stream_info);
         prev_position = position;
     }
 
-    if keys.contains(&Keycode::U){
+    if keys.contains(&Keycode::U) && stream_info.current_window {
         volume_down(&mut stream_info, prev_position)
     }
 
-    if keys.contains(&Keycode::I){
+    if keys.contains(&Keycode::I) && stream_info.current_window {
         volume_up(&mut stream_info, prev_position)
     }
 
-    if keys.contains(&Keycode::P){
+    if keys.contains(&Keycode::P) && stream_info.current_window {
         shuffle(&mut stream_info);
 
     }
 
-    if keys.contains(&Keycode::L){
+    if keys.contains(&Keycode::L) && stream_info.current_window {
         loop_media(&mut stream_info);
         println!("Looping current media.");
         std::thread::sleep(std::time::Duration::from_millis(250));
