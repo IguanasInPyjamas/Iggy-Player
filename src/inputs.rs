@@ -3,6 +3,7 @@ use gstreamer::prelude::*;
 use device_query::Keycode;
 use std::io;
 use std::io::Write;
+use std::env;
 use glib;
 use glib::prelude::*;
 
@@ -109,8 +110,13 @@ pub fn pause(stream_info: &stream_info::_StreamInfo){
 
 pub fn check_keypress(keys: &Vec<device_query::Keycode>,position:gstreamer::ClockTime,mut stream_info: &mut stream_info::_StreamInfo) -> gstreamer::ClockTime {
     let mut prev_position = position;
-    //Only have handling for linux at the moment. On Windows, this needs to be commented out. 
+    //Only have handling for linux at the moment. On Windows, we need to figure out a way to get the window class. 
+    if env::consts::OS == "linux"{
     window_processing::linux_query_window(&mut stream_info);
+    } else {
+    stream_info.current_window = true;
+    }
+    
     if keys.contains(&Keycode::Space) &&
     stream_info.current_window {
         pause(&stream_info);
