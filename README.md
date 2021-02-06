@@ -2,9 +2,8 @@
 A lightweight media player in rust using gstreamer.
 Nowhere near to completion - collaboration is welcome!
 
-At the moment the video file needs to be set as a URI in the filepath variable in src/main.rs for testing.
-
 TODO;
  
 - Function that allows seeking to N places in the video - to be used for a scrollbar in guis
 - Playlists 
+- Skip forward and back to different files in playlist.
